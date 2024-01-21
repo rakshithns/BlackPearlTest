@@ -19,7 +19,7 @@ namespace WeatherForcastAPI.Models
             get
             {
                 // Example calculation
-                return ((TemperatureAvg * (9/5)) + 32);
+                return Math.Round(((TemperatureAvg * (9/5)) + 32), 2);
             }
         }
         [JsonIgnore] // This attribute prevents the property from being serialized
@@ -28,7 +28,7 @@ namespace WeatherForcastAPI.Models
             get
             {
                 // Example calculation
-                return ((TemperatureMax * (9 / 5)) + 32);
+                return Math.Round(((TemperatureMax * (9 / 5)) + 32),2);
             }
         }
         [JsonIgnore] // This attribute prevents the property from being serialized
@@ -37,7 +37,7 @@ namespace WeatherForcastAPI.Models
             get
             {
                 // Example calculation
-                return ((TemperatureMin * (9 / 5)) + 32);
+                return Math.Round(((TemperatureMin * (9 / 5)) + 32), 2);
             }
         }
     }

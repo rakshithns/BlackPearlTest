@@ -1,12 +1,13 @@
+import MainComponent from './components/MainComponent';
+import { WeatherProvider } from './context/WeatherContext';
 import './App.css'
-import MainComponent from './components/MainComponent'
 
 function App() {
 
   return (
-    <div>
-      <MainComponent></MainComponent>
-    </div>
+    <WeatherProvider>
+      <MainComponent />
+    </WeatherProvider>
   )
 }
 

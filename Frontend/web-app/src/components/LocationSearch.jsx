@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import LocationValues from './LocationValues';
+import { WeatherContext } from '../context/WeatherContext';
 import axios from 'axios';
 import './LocationSearch.css';
 
@@ -8,6 +9,7 @@ const LocationSearch = ({locationNo}) => {
     const [suggestions, setSuggestions] = useState([]);
     const [debounceTimer, setDebounceTimer] = useState(null);
     const [weatherData, setWeatherData] = useState(null);
+    const { setLocWeatherData } = useContext(WeatherContext);
 
     // Function to handle input changes for search bar
     const handleInputChange = (e) => {
@@ -27,6 +29,7 @@ const LocationSearch = ({locationNo}) => {
         if (!input || input === '') {
             setSuggestions([]);
             setWeatherData(null);
+            setLocWeatherData(prev => ({ ...prev, ['location'+locationNo]: null }));
             return;
         }
 
@@ -48,6 +51,7 @@ const LocationSearch = ({locationNo}) => {
         const weatherInfo = await axios.get(`https://localhost:7068/WeatherForecast/location/${suggestion.lat + ','+suggestion.lon}`);
         console.log(weatherInfo.data);
         setWeatherData(weatherInfo.data);
+        setLocWeatherData(prev => ({ ...prev, ['location'+locationNo]: weatherInfo.data }));
         if (debounceTimer) clearTimeout(debounceTimer);
     };
 
