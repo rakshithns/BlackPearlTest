@@ -1,10 +1,11 @@
+import LocationSearch from './LocationSearch'
 import './App.css'
 
 function App() {
 
   return (
     <div>
-      From Main Component
+      <LocationSearch locationNo={1} />
     </div>
   )
 }
