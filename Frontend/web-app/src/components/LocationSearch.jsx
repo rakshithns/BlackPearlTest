@@ -45,11 +45,9 @@ const LocationSearch = ({locationNo}) => {
 
     // Function to handle suggestion selection
     const selectSuggestion = async (suggestion) => {
-        console.log(suggestion);
         setInputValue(suggestion.display_name); // display_name is a field in Nominatim's response
         setSuggestions([]);
         const weatherInfo = await axios.get(`https://localhost:7068/WeatherForecast/location/${suggestion.lat + ','+suggestion.lon}`);
-        console.log(weatherInfo.data);
         setWeatherData(weatherInfo.data);
         setLocWeatherData(prev => ({ ...prev, ['location'+locationNo]: weatherInfo.data }));
         if (debounceTimer) clearTimeout(debounceTimer);
