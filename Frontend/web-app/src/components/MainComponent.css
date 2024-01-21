@@ -1,0 +1,13 @@
+.main-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 50px 100px 50px 100px;
+  }
+
+.main-container .delta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+}

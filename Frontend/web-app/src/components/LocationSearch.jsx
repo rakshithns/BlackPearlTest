@@ -1,12 +1,15 @@
 import { useState } from 'react';
+import LocationValues from './LocationValues';
 import axios from 'axios';
+import './LocationSearch.css';
 
 const LocationSearch = ({locationNo}) => {
     const [inputValue, setInputValue] = useState('');
     const [suggestions, setSuggestions] = useState([]);
     const [debounceTimer, setDebounceTimer] = useState(null);
+    const [weatherData, setWeatherData] = useState(null);
 
-    // Function to handle input changes
+    // Function to handle input changes for search bar
     const handleInputChange = (e) => {
         setInputValue(e.target.value);
         
@@ -23,6 +26,7 @@ const LocationSearch = ({locationNo}) => {
     const searchLocations = async (input) => {
         if (!input || input === '') {
             setSuggestions([]);
+            setWeatherData(null);
             return;
         }
 
@@ -32,6 +36,7 @@ const LocationSearch = ({locationNo}) => {
         } catch (error) {
             console.error('Error fetching data:', error);
             setSuggestions([]);
+            setWeatherData(null);
         }
     };
 
@@ -42,25 +47,34 @@ const LocationSearch = ({locationNo}) => {
         setSuggestions([]);
         const weatherInfo = await axios.get(`https://localhost:7068/WeatherForecast/location/${suggestion.lat + ','+suggestion.lon}`);
         console.log(weatherInfo.data);
+        setWeatherData(weatherInfo.data);
         if (debounceTimer) clearTimeout(debounceTimer);
     };
 
     return (
-        <div>
+        <div className="search-container">
             <h2>Location {locationNo}</h2>
             <input
                 type="text"
                 value={inputValue}
                 onChange={handleInputChange}
                 placeholder="Search Location"
+                className="search-input"
             />
-            <ul>
+            <ul className="suggestions-list">
                 {suggestions.map((suggestion, index) => (
-                    <li key={index} onClick={() => selectSuggestion(suggestion)}>
+                    <li key={index} onClick={() => selectSuggestion(suggestion)} className="suggestion-item">
                         {suggestion.display_name}
                     </li>
                 ))}
             </ul>
+            <div>
+                {
+                    weatherData?.timeLines?.daily.map((data, index) => (
+                        <LocationValues key={index} dailyData={data}></LocationValues>
+                    ))
+                }
+            </div>
         </div>
     );
 };

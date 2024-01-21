@@ -1,6 +1,7 @@
-﻿using Microsoft.Extensions.Options;
+﻿using WeatherForcastAPI.Models;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 using System.Runtime;
-using WeatherForcastAPI.Models;
 
 namespace WeatherForcastAPI.Services
 {
@@ -15,12 +16,13 @@ namespace WeatherForcastAPI.Services
             _apiKey = options.Value.ApiKey;
         }
 
-        public async Task<string> GetWeatherForecasts(string location)
+        public async Task<WeatherForecastInfo> GetWeatherForecasts(string location)
         {
             string url = @"https://api.tomorrow.io/v4/weather/forecast?location=" + location + "&apikey=" + _apiKey;
             HttpResponseMessage response = await _httpClient.GetAsync(url);
             string jsonResult = await response.Content.ReadAsStringAsync();
-            return jsonResult;
+            var obj = JsonConvert.DeserializeObject<WeatherForecastInfo>(jsonResult);
+            return obj;
         }
     }
 }
